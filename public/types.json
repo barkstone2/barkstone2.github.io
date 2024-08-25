@@ -50,6 +50,7 @@
     "created": "datetime",
     "updated": "datetime",
     "\" : \"": "text",
-    "checked": "checkbox"
+    "checked": "checkbox",
+    "references": "multitext"
   }
 }
