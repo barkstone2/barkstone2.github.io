@@ -1,6 +1,6 @@
 ---
 created: 2024-08-25 22:45
-updated: 2024-08-25 23:52
+updated: 2024-08-26 11:26
 tags:
   - MySQL
   - DB
@@ -8,7 +8,7 @@ tags:
   - Optimizer
   - 옵티마이저
 references:
-  - https://dev.mysql.com/doc/refman/8.0/en/mrr-optimization.html
+  - https://www.w3schools.com/js/js_strict.asp
 ---
 # 정의
 세컨더리 인덱스에 대한 인덱스 레인지 스캔, 동등 조인 시 발생할 수 있는 랜덤 액세스를 줄이기 위한 최적화 기법이다.
