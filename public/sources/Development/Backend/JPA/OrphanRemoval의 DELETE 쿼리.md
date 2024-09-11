@@ -1,6 +1,6 @@
 ---
 created: 2024-08-27 09:22
-updated: 2024-08-27 17:56
+updated: 2024-09-11 16:07
 tags:
   - JPA
   - Spring/Data/JPA
@@ -45,4 +45,4 @@ detailQuestRepository.deleteAllDetails(questId)
 quest.otherWorks() // 엔티티 내부에 캡슐화된 다른 작업 호출
 ```
 
-이런 문제 없이 처리하려면 [[Hibernate 배치|하이버네이트 배치]]를 사용할 수 있다.
+이런 문제 없이 처리하려면 [[Hibernate JDBC 배치|하이버네이트 배치]]를 사용할 수 있다.
