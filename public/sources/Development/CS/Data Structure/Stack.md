@@ -1,6 +1,6 @@
 ---
 created: 2024-09-11 11:45
-updated: 2024-09-12 10:47
+updated: 2024-09-12 11:25
 tags:
   - CS/DataStructure
   - Java/DataStructure
@@ -151,7 +151,7 @@ public synchronized int search(Object o) {}
 > A more complete and consistent set of LIFO stack operations is provided by the Deque interface and its implementations, which should be used in preference to this class.
 ## `ArrayDeque`
 [[ArrayDeque]] 구현체는 엄밀히 말하자면 `Deque`의 구현체지만, `Deque`의 특성상 `Stack`의 기능도 제공한다.
-`Stack` 구현체와 달리 동기화를 제공하지 않으며 동기화를 제공하지 않기 때문에 `Stack` 구현체보다 더 빠르다.
+Stack 구현체와 달리 동기화를 제공하지 않으며 동기화를 제공하지 않기 때문에 `Stack` 구현체보다 더 빠르다.
 ```java
 public class ArrayDeque<E> extends AbstractCollection<E>  
                            implements Deque<E>, Cloneable, Serializable  
