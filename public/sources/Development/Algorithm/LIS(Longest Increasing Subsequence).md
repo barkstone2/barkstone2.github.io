@@ -1,13 +1,19 @@
 ---
 created: 2024-09-30 11:41
-updated: 2024-09-30 16:27
+updated: 2024-09-30 17:00
 tags:
   - Algorithm
 ---
+> [!check] 관련 문제
+> [가장 긴 증가하는 부분 수열](https://www.acmicpc.net/problem/11053) - DP를 사용한 LIS 길이 구하기
+> [가장 긴 증가하는 부분 수열 2](https://www.acmicpc.net/problem/12015) - 이분 탐색을 사용한 LIS 길이 구하기
+> [가장 긴 증가하는 부분 수열 4](https://www.acmicpc.net/problem/14002) - DP를 사용한 LIS 구하기
+> [가장 긴 증가하는 부분 수열 5](https://www.acmicpc.net/problem/14003) - 이분 탐색을 사용한 LIS 구하기
+
 LIS(Longest Increasing Subsequence)는 최장 증가 부분 수열을 찾는 문제다.
-# DP로 풀기
-DP 점화식은 재귀 로직을 작성해보면 쉽게 떠올릴 수 있다.
-LIS를 구하기 위해서는 다음과 같은 재귀 로직을 작성할 수 있다.
+문제에 따라 LIS 길이만 구하는 경우도 있고, 실제 LIS를 구해야 하는 경우도 있다.
+# DP로 LIS 길이 구하기
+DP로 LIS 길이를 구하기 위해서는 먼저 아래와 같은 재귀 로직을 작성할 수 있다.
 ```java
 int lis(int[] nums) {  
     int result = 0;  
@@ -28,7 +34,8 @@ int lis(int[] nums, int idx) {
 }
 ```
 
-이때 한 눈에 보기에도 불필요한 중복 탐색이 많이 발생한다는 것을 알 수 있으며 메모이제이션을 통해 문제를 해결할 수 있다는 것을 눈치챌 수 있다.
+이때 한 눈에 보기에도 불필요한 중복 탐색이 많이 발생한다는 것을 알 수 있으며 메모이제이션을 통해 불필요한 탐색을 줄일 수 있다.
+
 `nums[i]`가 마지막 요소로 사용됐을 때의 LIS 길이를 구하는 과정에서 중복 부분 구조가 발생하므로, 이에 대해 메모이제이션을 수행한다.
 
 ```java
@@ -52,27 +59,76 @@ int lis(int[] nums, int idx) {
 }
 ```
 
-이어서 최적 기본 구조를 고려하고 기본 단계를 정의하면 다음과 같이 코드를 작성할 수 있다.
+이어서 최적 기본 구조를 고려하고 기본 단계를 정의하면 아래와 같이 코드를 작성할 수 있다.
 ```java
 int lis(int[] nums) {  
     int result = 0;  
     for (int i = 0; i < nums.length; i++) {  
         dp[i] = 1;  
         for (int j = 0; j < i; j++) {  
-            if (nums[j] < nums[i]) {  
-                dp[i] = Math.max(dp[i], dp[j] + 1);  
+            if (nums[j] < nums[i] && dp[i] < dp[j] + 1) {  
+                dp[i] = dp[j] + 1;  
             }  
         }  
-        result = Math.max(result, dp[i]);  
+        if (result < dp[i]) {
+          result = dp[i];
+        }
     }  
     return result;  
 }
 ```
 
-다만 DP를 통해 LIS를 구하는 것에는 한계가 있다.
+다만 DP를 통해 LIS의 길이를 구하는 것에는 한계가 있다.
 코드를 보면 알겠지만 `O(N^2)`의 시간 복잡도를 갖기 때문에 N의 값이 1만 정도만 돼도 1억 번의 연산이 필요하다.
-# 이분 탐색으로 풀기
-N의 값이 클 때는 이분 탐색으로 LIS를 구할 수 있다.
+# DP로 실제 LIS 구하기
+DP 배열은 LIS의 길이만 추적하기 때문에 실제 LIS를 구하기 위해서는 별도의 처리가 필요하다.
+
+먼저 DP 배열의 값이 갱신될 때마다 참조한 요소의 인덱스를 기록한다.
+`DP[j]`는 j번째 요소가 마지막으로 사용됐을 때의 LIS 길이를 의미하므로 `DP[j]`를 참조해 `DP[i]`를 갱신했다는 의미는 `nums[j]` 뒤에 `nums[i]`를 사용했다는 것과 동일하다.
+따라서 i번째 요소의 이전 요소를 나타내는 `parent[i]`의 값을 `j`로 초기화할 수 있다.
+
+이어서 LIS의 길이가 갱신될 때마다 현재 LIS의 마지막 인덱스도 기록한다.
+이 역시 마찬가지로 `i`번째 값이 마지막으로 왔을 때의 LIS가 더 길다는 의미이므로, 마지막 인덱스를 나타내는 `lastIndex`의 값을 `i`로 초기화할 수 있다.
+
+LIS 길이 탐색이 끝났을 때 `lastIndex` 값이 실제 LIS의 마지막 요소를 가리키는 인덱스가 된다.
+해당 인덱스부터 시작해 `parent` 배열을 역으로 참조해나가면 실제 LIS를 구할 수 있다.
+
+이를 구현한 코드는 아래와 같다.
+```java
+parent = new int[N];  
+Arrays.fill(parent, -1);
+
+int[] lis(int[] nums) {  
+    int size = 0;  
+    int lastIndex = 0;  
+    for (int i = 0; i < nums.length; i++) {  
+        dp[i] = 1;  
+        for (int j = 0; j < i; j++) {  
+            if (nums[j] < nums[i] && dp[i] < dp[j] + 1) {  
+                dp[i] = dp[j] + 1;  
+                parent[i] = j;  
+            }  
+        }  
+        if (size < dp[i]) {  
+            size = dp[i];  
+            lastIndex = i;  
+        }  
+    }  
+  
+    int[] result = new int[size];  
+    int idx = size - 1;  
+    for (int i = lastIndex; i >= 0; i = parent[i]) {  
+        result[idx--] = nums[i];  
+        if (parent[i] == -1) {  
+            break;  
+        }  
+    }  
+  
+    return result;  
+}
+```
+# 이분 탐색으로 LIS 길이 구하기
+N의 값이 클 때는 이분 탐색으로 LIS의 길이를 구할 수 있다.
 다만 주어진 배열 A가 정렬된 상태가 아니고, A를 정렬할 수도 없기 때문에 약간의 응용이 필요하다.
 
 핵심은 LIS가 항상 정렬된 상태를 유지한다는 점이다. 배열 A는 정렬되어 있지 않지만, LIS는 항상 오름차순 정렬된 상태를 유지한다.
@@ -106,7 +162,7 @@ for (int num : nums) {
 하지만 탐색 방향이 왼쪽에서 오른쪽이고, 현재 요소가 항상 삽입된 값 중 가장 오른쪽 값이기 때문에 sub 배열의 길이가 LIS의 길이와 일치하게 된다.
 
 DP를 사용할 때와 다르게 N개의 요소에 대해 이분탐색을 수행하게 되므로 `O(NlogN)`의 시간 복잡도로 LIS의 길이를 구할 수 있다.
-# 실제 LIS 구하기
+# 이분 탐색으로 실제 LIS 구하기
 하지만 단순히 이분탐색만 사용하는 방법으로는 실제 LIS를 구할 수는 없다.
 이는 이분탐색을 통해 값을 대체하는 과정에서 나중에 오는 요소를 사용해 SUB의 앞 부분을 갱신할 수 있기 때문이다.
 
