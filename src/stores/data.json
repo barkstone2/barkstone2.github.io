@@ -1,1 +1,9 @@
-{}
+{
+  "sourceDir": "!blog",
+  "repositoryUrl": "https://github.com/barkstone2/barkstone2.github.io.git",
+  "isActivated": true,
+  "version": "0.0.6",
+  "isEnableComments": true,
+  "repo": "barkstone2/barkstone2.github.io",
+  "theme": "photon-dark"
+}
