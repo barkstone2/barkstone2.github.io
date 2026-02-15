@@ -1,9 +1,9 @@
 {
-  "sourceDir": "",
-  "indexFilePath": "",
-  "repositoryUrl": "",
-  "isActivated": false,
-  "version": "",
+  "sourceDir": "test-blog",
+  "indexFilePath": "test-blog/index page.md",
+  "repositoryUrl": "https://github.com/barkstone2/barkstone2.github.io",
+  "isActivated": true,
+  "version": "0.1.1",
   "isEnableComments": false,
   "repo": "",
   "theme": ""
